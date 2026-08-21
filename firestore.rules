@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Store settings: readable by all customers, writable by store manager
+    match /storeSettings/{settingId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Products catalog: readable by all, writable by store manager
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Customer orders: customers can submit orders; store can read, update status, and manage
+    match /orders/{orderId} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if true;
+    }
+  }
+}

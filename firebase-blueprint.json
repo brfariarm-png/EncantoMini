@@ -1,0 +1,79 @@
+{
+  "entities": {
+    "orders": {
+      "title": "Orders",
+      "description": "Store customer orders placed via the digital menu or WhatsApp",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Order ID" },
+        "orderNumber": { "type": "string", "description": "Human-readable order sequence number" },
+        "customerName": { "type": "string", "description": "Customer name" },
+        "customerPhone": { "type": "string", "description": "Customer WhatsApp phone number" },
+        "deliveryType": { "type": "string", "enum": ["entrega", "retirada"], "description": "Delivery method" },
+        "address": { "type": "object", "description": "Delivery address details if deliveryType is entrega" },
+        "paymentMethod": { "type": "string", "enum": ["pix", "cartao_credito", "cartao_debito", "dinheiro"], "description": "Payment method selected" },
+        "changeFor": { "type": "string", "description": "Change requested if payment is cash" },
+        "items": { "type": "array", "description": "List of ordered items with chosen flavors and addons" },
+        "subtotal": { "type": "number", "description": "Sum of item prices" },
+        "deliveryFee": { "type": "number", "description": "Delivery fee applied" },
+        "discount": { "type": "number", "description": "Discount applied from coupons" },
+        "couponCode": { "type": "string", "description": "Coupon code used" },
+        "total": { "type": "number", "description": "Final total amount" },
+        "status": { "type": "string", "enum": ["recebido", "preparando", "saiu_entrega", "pronto_retirada", "entregue", "cancelado"], "description": "Current order state" },
+        "notes": { "type": "string", "description": "Customer special instructions" },
+        "printed": { "type": "boolean", "description": "Whether kitchen thermal ticket was printed" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation ISO timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last update ISO timestamp" }
+      },
+      "required": ["id", "customerName", "items", "total", "status", "createdAt"]
+    },
+    "products": {
+      "title": "Products",
+      "description": "Menu products and sweets offered by Encanto Mini",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Product ID" },
+        "name": { "type": "string", "description": "Product name" },
+        "shortDescription": { "type": "string", "description": "Brief tagline" },
+        "fullDescription": { "type": "string", "description": "Detailed description" },
+        "price": { "type": "number", "description": "Regular price in BRL" },
+        "promoPrice": { "type": "number", "description": "Optional promotional price" },
+        "category": { "type": "string", "description": "Category identifier" },
+        "image": { "type": "string", "description": "Image URL" },
+        "badge": { "type": "string", "description": "Promotional badge text" },
+        "servesCount": { "type": "string", "description": "Portion indication" },
+        "isAvailable": { "type": "boolean", "description": "Whether item is currently in stock" },
+        "allowsAddons": { "type": "boolean", "description": "Whether customer can pick addons" },
+        "availableAddons": { "type": "array", "description": "List of available addons" },
+        "allowsFlavors": { "type": "boolean", "description": "Whether customer must pick flavor" },
+        "flavorsTitle": { "type": "string", "description": "Label for flavor selection" },
+        "maxFlavors": { "type": "number", "description": "Max flavors selectable" },
+        "availableFlavors": { "type": "array", "description": "List of flavors" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last update timestamp" }
+      },
+      "required": ["id", "name", "price", "category", "isAvailable"]
+    },
+    "storeSettings": {
+      "title": "StoreSettings",
+      "description": "Global store configuration and operational parameters",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Config document ID (default)" },
+        "storeName": { "type": "string", "description": "Brand name" },
+        "subtitle": { "type": "string", "description": "Store subtitle" },
+        "whatsapp": { "type": "string", "description": "Official WhatsApp number" },
+        "address": { "type": "string", "description": "Physical pickup address" },
+        "isStoreOpen": { "type": "boolean", "description": "Open/closed status" },
+        "minimumOrder": { "type": "number", "description": "Minimum order value" },
+        "freeDeliveryAbove": { "type": "number", "description": "Threshold for free delivery" },
+        "pixKey": { "type": "string", "description": "PIX payment key" },
+        "pixName": { "type": "string", "description": "PIX account owner name" },
+        "openingHours": { "type": "string", "description": "Operating hours text" },
+        "deliveryFee": { "type": "number", "description": "Default delivery fee" },
+        "neighborhoods": { "type": "array", "description": "Neighborhood delivery fee list" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last update timestamp" }
+      },
+      "required": ["storeName", "whatsapp", "isStoreOpen"]
+    }
+  }
+}

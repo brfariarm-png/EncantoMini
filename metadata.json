@@ -1,0 +1,6 @@
+{
+  "name": "Encanto Mini - Cardápio & Delivery",
+  "description": "Aplicativo oficial de vendas, pedidos e delivery da Encanto Mini: mini salgados artesanais, combos festa, mini churros, barcas gourmet e bebidas.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
