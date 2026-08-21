@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Plus, Sparkles, Users, Utensils } from 'lucide-react';
 import { Product } from '../types';
 import { formatCurrency } from '../utils/formatters';
+import { ENCANTO_LOGO } from '../assets/logo';
 
 interface ProductCardProps {
   product: Product;
@@ -22,26 +23,29 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const displayPrice = product.promoPrice ?? product.price;
   const hasDiscount = product.promoPrice !== undefined && product.promoPrice < product.price;
 
+  const [imgSrc, setImgSrc] = useState(product.image || ENCANTO_LOGO);
+
+  React.useEffect(() => {
+    setImgSrc(product.image || ENCANTO_LOGO);
+  }, [product.image]);
+
   return (
     <div className="group bg-white rounded-2xl border border-pink-100/90 shadow-xs hover:shadow-md hover:border-pink-300 transition-all duration-200 flex flex-col justify-between overflow-hidden relative">
       
       {/* Top Media & Badges */}
       <div 
         onClick={() => onOpenProduct(product)}
-        className="relative h-44 sm:h-48 overflow-hidden bg-pink-50/30 cursor-pointer"
+        className="relative h-44 sm:h-48 overflow-hidden bg-pink-50/30 cursor-pointer flex items-center justify-center"
       >
         <img
-          src={product.image || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600'}
+          src={imgSrc}
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
           decoding="async"
-          referrerPolicy="no-referrer"
-          onError={(e) => {
-            const target = e.currentTarget;
-            const fallback = 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600';
-            if (target.src !== fallback) {
-              target.src = fallback;
+          onError={() => {
+            if (imgSrc !== ENCANTO_LOGO) {
+              setImgSrc(ENCANTO_LOGO);
             }
           }}
         />

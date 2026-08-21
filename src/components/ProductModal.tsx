@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Product, CartItem, CartItemFlavor, CartItemAddon } from '../types';
 import { formatCurrency } from '../utils/formatters';
+import { ENCANTO_LOGO } from '../assets/logo';
 
 interface ProductModalProps {
   product: Product | null;
@@ -143,6 +144,12 @@ export const ProductModal: React.FC<ProductModalProps> = ({
     onClose();
   };
 
+  const [modalImgSrc, setModalImgSrc] = useState(product.image || ENCANTO_LOGO);
+
+  useEffect(() => {
+    setModalImgSrc(product.image || ENCANTO_LOGO);
+  }, [product.image]);
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-950/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
       <div 
@@ -151,18 +158,15 @@ export const ProductModal: React.FC<ProductModalProps> = ({
       >
         
         {/* Header Media */}
-        <div className="relative h-48 sm:h-56 bg-stone-900 shrink-0">
+        <div className="relative h-48 sm:h-56 bg-stone-900 shrink-0 flex items-center justify-center">
           <img
-            src={product.image || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600'}
+            src={modalImgSrc}
             alt={product.name}
             className="w-full h-full object-cover opacity-90"
             decoding="async"
-            referrerPolicy="no-referrer"
-            onError={(e) => {
-              const target = e.currentTarget;
-              const fallback = 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600';
-              if (target.src !== fallback) {
-                target.src = fallback;
+            onError={() => {
+              if (modalImgSrc !== ENCANTO_LOGO) {
+                setModalImgSrc(ENCANTO_LOGO);
               }
             }}
           />
