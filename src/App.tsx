@@ -7,6 +7,7 @@ import {
   NEIGHBORHOODS,
   CATEGORIES_LIST
 } from './data/initialData';
+import { ENCANTO_LOGO } from './assets/logo';
 import { 
   CartItem, 
   Coupon, 
@@ -70,9 +71,10 @@ export default function App() {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          const existingIds = new Set(parsed.map((p: Product) => p.id));
-          const missing = INITIAL_PRODUCTS.filter((p) => !existingIds.has(p.id));
-          return [...parsed, ...missing];
+          return parsed.map((p: Product) => ({
+            ...p,
+            image: (!p.image || p.image.includes('images.unsplash.com')) ? ENCANTO_LOGO : p.image,
+          }));
         }
       }
       return INITIAL_PRODUCTS;
@@ -199,7 +201,11 @@ export default function App() {
     // 2. Subscribe to Cloud Products
     const unsubProducts = subscribeToProducts((cloudProducts) => {
       if (cloudProducts.length > 0) {
-        setProducts(cloudProducts);
+        const sanitized = cloudProducts.map((p) => ({
+          ...p,
+          image: (!p.image || p.image.includes('images.unsplash.com')) ? ENCANTO_LOGO : p.image,
+        }));
+        setProducts(sanitized);
       } else {
         // Seed initial products to Firestore
         syncProductsToFirestore(products);

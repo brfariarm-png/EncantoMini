@@ -145,7 +145,7 @@ export const StoreAdminModal: React.FC<StoreAdminModalProps> = ({
       promoPrice: parsedPromo,
       shortDescription: newProdDesc.trim() || 'Preparado com ingredientes selecionados.',
       fullDescription: newProdDesc.trim() || 'Delicioso item artesanal preparado com carinho.',
-      image: newProdImage.trim() || 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=600&auto=format&fit=crop&q=80',
+      image: newProdImage.trim() || ENCANTO_LOGO,
       badge: newProdBadge.trim() || undefined,
       isAvailable: true,
       allowsAddons: true,

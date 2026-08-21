@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { Product, ProductCategory, AddonOption, FlavorOption } from '../types';
 import { formatCurrency } from '../utils/formatters';
+import { ENCANTO_LOGO } from '../assets/logo';
 
 interface ProductItemEditorProps {
   product: Product;
@@ -357,9 +358,9 @@ export const ProductItemEditor: React.FC<ProductItemEditorProps> = ({
         <div className="p-4 sm:p-5 bg-gradient-to-r from-stone-950 via-stone-900 to-pink-950 text-white flex items-center justify-between shrink-0 border-b border-pink-900/40">
           <div className="flex items-center gap-3">
             <img
-              src={image || 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=200&auto=format&fit=crop&q=80'}
+              src={image || ENCANTO_LOGO}
               alt="Preview"
-              className="w-11 h-11 rounded-xl object-cover border border-pink-400/40 shadow-xs shrink-0"
+              className="w-11 h-11 rounded-xl object-cover border border-pink-400/40 shadow-xs shrink-0 bg-white"
             />
             <div>
               <div className="flex items-center gap-2">
@@ -450,14 +451,13 @@ export const ProductItemEditor: React.FC<ProductItemEditorProps> = ({
             <div className="space-y-5">
               {/* Live Preview Card */}
               <div className="p-4 bg-pink-50/50 border border-pink-200 rounded-2xl flex flex-col sm:flex-row items-center gap-4">
-                <div className="relative w-32 h-32 rounded-2xl overflow-hidden border-2 border-pink-300 shadow-md shrink-0 bg-stone-100">
+                <div className="relative w-32 h-32 rounded-2xl overflow-hidden border-2 border-pink-300 shadow-md shrink-0 bg-stone-100 flex items-center justify-center">
                   <img
-                    src={image}
+                    src={image || ENCANTO_LOGO}
                     alt="Preview"
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src =
-                        'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=600&auto=format&fit=crop&q=80';
+                      (e.target as HTMLImageElement).src = ENCANTO_LOGO;
                     }}
                   />
                   <span className="absolute bottom-1 right-1 bg-stone-900/80 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
@@ -489,6 +489,15 @@ export const ProductItemEditor: React.FC<ProductItemEditorProps> = ({
                       <Upload className="w-3.5 h-3.5" />
                       <span>Enviar do Celular / Computador</span>
                     </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setImage(ENCANTO_LOGO)}
+                      className="flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-pink-50 text-pink-700 font-bold text-xs rounded-xl border border-pink-300 shadow-2xs transition-colors cursor-pointer"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Usar Logo Oficial Encanto</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -500,7 +509,7 @@ export const ProductItemEditor: React.FC<ProductItemEditorProps> = ({
                   {image && (
                     <button
                       type="button"
-                      onClick={() => setImage('https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=600&auto=format&fit=crop&q=80')}
+                      onClick={() => setImage(ENCANTO_LOGO)}
                       className="text-[10px] text-stone-400 hover:text-stone-700"
                     >
                       Restaurar padrão
