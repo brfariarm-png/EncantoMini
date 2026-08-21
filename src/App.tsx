@@ -30,7 +30,8 @@ import {
   subscribeToProducts,
   saveStoreSettingsToFirestore,
   subscribeToStoreSettings,
-  syncProductsToFirestore
+  syncProductsToFirestore,
+  syncPendingOrdersToFirestore
 } from './services/firebaseSync';
 
 import { Navbar } from './components/Navbar';
@@ -248,6 +249,10 @@ export default function App() {
         setOrders(cloudOrders);
       } else {
         isInitialOrderSync.current = false;
+        // If cloud is currently empty but local device has existing orders, sync them up to Firestore
+        if (orders.length > 0) {
+          syncPendingOrdersToFirestore(orders);
+        }
       }
     });
 

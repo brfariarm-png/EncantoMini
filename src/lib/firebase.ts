@@ -1,8 +1,16 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { initializeFirestore } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId || undefined);
+
+export const db = initializeFirestore(
+  app,
+  {
+    ignoreUndefinedProperties: true,
+  },
+  firebaseConfig.firestoreDatabaseId || undefined
+);
 
 export default app;
+
