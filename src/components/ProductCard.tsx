@@ -31,10 +31,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         className="relative h-44 sm:h-48 overflow-hidden bg-pink-50/30 cursor-pointer"
       >
         <img
-          src={product.image}
+          src={product.image || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600'}
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
+          decoding="async"
+          referrerPolicy="no-referrer"
+          onError={(e) => {
+            const target = e.currentTarget;
+            const fallback = 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600';
+            if (target.src !== fallback) {
+              target.src = fallback;
+            }
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-transparent to-transparent" />
 

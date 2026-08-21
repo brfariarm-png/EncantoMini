@@ -198,7 +198,7 @@ export const ProductItemEditor: React.FC<ProductItemEditorProps> = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Handle local file upload
+  // Handle local file upload with auto-compression for high mobile compatibility
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -208,13 +208,58 @@ export const ProductItemEditor: React.FC<ProductItemEditorProps> = ({
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        setImage(reader.result);
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let width = img.width;
+      let height = img.height;
+      const maxDim = 800;
+
+      if (width > maxDim || height > maxDim) {
+        if (width > height) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
       }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+        setImage(dataUrl);
+      } else {
+        const fallbackReader = new FileReader();
+        fallbackReader.onload = () => {
+          if (typeof fallbackReader.result === 'string') {
+            setImage(fallbackReader.result);
+          }
+        };
+        fallbackReader.readAsDataURL(file);
+      }
+      URL.revokeObjectURL(objectUrl);
     };
-    reader.readAsDataURL(file);
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      const fallbackReader = new FileReader();
+      fallbackReader.onload = () => {
+        if (typeof fallbackReader.result === 'string') {
+          setImage(fallbackReader.result);
+        }
+      };
+      fallbackReader.readAsDataURL(file);
+    };
+
+    img.src = objectUrl;
   };
 
   // Add custom addon

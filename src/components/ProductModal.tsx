@@ -153,9 +153,18 @@ export const ProductModal: React.FC<ProductModalProps> = ({
         {/* Header Media */}
         <div className="relative h-48 sm:h-56 bg-stone-900 shrink-0">
           <img
-            src={product.image}
+            src={product.image || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600'}
             alt={product.name}
             className="w-full h-full object-cover opacity-90"
+            decoding="async"
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              const target = e.currentTarget;
+              const fallback = 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600';
+              if (target.src !== fallback) {
+                target.src = fallback;
+              }
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/40 to-transparent" />
 
