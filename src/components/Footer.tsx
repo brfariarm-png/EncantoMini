@@ -153,21 +153,7 @@ export const Footer: React.FC<FooterProps> = ({ store, onOpenAdmin, onOpenInstal
 
         <div className="pt-6 border-t border-stone-800 text-center text-xs text-stone-400 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p>© {new Date().getFullYear()} {store.name}. Todos os direitos reservados.</p>
-          
-          {/* Cardapily Signature Badge */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-stone-900 border border-stone-800 text-stone-300 font-medium">
-            <span>Feito com</span>
-            <span className="text-emerald-400 font-bold">💚</span>
-            <span>no</span>
-            <a 
-              href="https://cardapily.com.br" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-emerald-400 font-bold hover:underline"
-            >
-              Cardapily
-            </a>
-          </div>
+          <p className="text-stone-500 text-[11px]">Cardápio Digital Oficial</p>
         </div>
       </div>
     </footer>
