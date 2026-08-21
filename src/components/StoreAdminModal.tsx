@@ -31,6 +31,7 @@ import {
 import { Coupon, NeighborhoodFee, Order, OrderStatus, Product, ProductCategory, StoreSettings } from '../types';
 import { formatCurrency, formatPhoneNumber } from '../utils/formatters';
 import { ProductItemEditor, CURATED_PHOTO_GALLERY, QUICK_ADDON_SUGGESTIONS } from './ProductItemEditor';
+import { ENCANTO_LOGO } from '../assets/logo';
 
 interface StoreAdminModalProps {
   isOpen: boolean;
@@ -270,8 +271,12 @@ export const StoreAdminModal: React.FC<StoreAdminModalProps> = ({
         {/* Header */}
         <div className="p-4 sm:p-5 bg-stone-900 text-white flex items-center justify-between shrink-0 border-b border-stone-800">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-pink-500 to-amber-500 text-stone-950 flex items-center justify-center font-bold shadow-xs">
-              <Store className="w-5 h-5 text-white" />
+            <div className="w-11 h-11 rounded-2xl bg-white p-0.5 border border-pink-400 flex items-center justify-center overflow-hidden shadow-xs shrink-0">
+              <img
+                src={ENCANTO_LOGO}
+                alt={store.name}
+                className="w-full h-full object-contain rounded-xl"
+              />
             </div>
             <div>
               <div className="flex items-center gap-2">

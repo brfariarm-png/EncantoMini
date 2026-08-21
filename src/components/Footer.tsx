@@ -1,13 +1,15 @@
 import React from 'react';
-import { Phone, MapPin, Clock, Instagram, Heart, Sparkles, ShieldCheck, Navigation } from 'lucide-react';
+import { Phone, MapPin, Clock, Instagram, Heart, Sparkles, ShieldCheck, Navigation, Download } from 'lucide-react';
 import { StoreSettings } from '../types';
+import { ENCANTO_LOGO } from '../assets/logo';
 
 interface FooterProps {
   store: StoreSettings;
   onOpenAdmin: () => void;
+  onOpenInstallApp?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ store, onOpenAdmin }) => {
+export const Footer: React.FC<FooterProps> = ({ store, onOpenAdmin, onOpenInstallApp }) => {
   return (
     <footer className="bg-stone-950 text-stone-300 pt-12 pb-24 sm:pb-12 border-t border-stone-800 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -15,21 +17,33 @@ export const Footer: React.FC<FooterProps> = ({ store, onOpenAdmin }) => {
           
           {/* Col 1: Brand & Bio */}
           <div className="space-y-3">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-pink-500 to-amber-600 text-white flex items-center justify-center font-bold text-lg font-heading shadow-md">
-                ✨
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-white p-0.5 border border-pink-400 shadow-md flex items-center justify-center overflow-hidden shrink-0">
+                <img
+                  src={ENCANTO_LOGO}
+                  alt={store.name}
+                  className="w-full h-full object-contain rounded-lg"
+                />
               </div>
               <span className="font-heading font-black text-xl text-white tracking-tight">
                 {store.name}
               </span>
             </div>
             <p className="text-xs text-stone-400 leading-relaxed">
-              Pequenos encantos, grandes sabores! 💕 Brownies, sucos naturais e tapiocas preparados com carinho para deixar seu dia ainda mais gostoso.
+              Doces Gourmet, Copos de Brownie, Afogadinhos e Tapiocas artesanais preparados com muito carinho para adoçar seus dias. 💕
             </p>
-            <div className="flex items-center gap-2 pt-1 text-xs text-pink-400 font-medium">
-              <Sparkles className="w-4 h-4" />
-              <span>Tudo feito com muito amor para você! 🥰</span>
-            </div>
+            {onOpenInstallApp && (
+              <div className="pt-1">
+                <button
+                  type="button"
+                  onClick={onOpenInstallApp}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-pink-900/60 hover:bg-pink-800 border border-pink-700/60 text-pink-200 text-xs font-bold rounded-xl transition-all cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Baixar Aplicativo no Celular</span>
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Col 2: Contact & Location */}

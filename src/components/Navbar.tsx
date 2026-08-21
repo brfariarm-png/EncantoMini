@@ -8,10 +8,12 @@ import {
   Sparkles, 
   PhoneCall, 
   ChefHat,
-  TrendingUp
+  TrendingUp,
+  Download
 } from 'lucide-react';
 import { StoreSettings } from '../types';
 import { formatCurrency } from '../utils/formatters';
+import { ENCANTO_LOGO } from '../assets/logo';
 
 interface NavbarProps {
   store: StoreSettings;
@@ -22,6 +24,7 @@ interface NavbarProps {
   onOpenAdmin: () => void;
   onOpenOrdersManager?: () => void;
   onOpenSalesReport?: () => void;
+  onOpenInstallApp?: () => void;
   ordersCount: number;
   pendingOrdersCount?: number;
   searchQuery: string;
@@ -37,6 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAdmin,
   onOpenOrdersManager,
   onOpenSalesReport,
+  onOpenInstallApp,
   ordersCount,
   pendingOrdersCount = 0,
   searchQuery,
@@ -56,12 +60,16 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-4">
           
           {/* Logo & Brand Zone */}
-          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-3.5 shrink-0">
             <div className="relative">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-pink-500 via-rose-500 to-pink-600 flex items-center justify-center text-white shadow-md shadow-pink-500/25 font-heading font-black text-xl sm:text-2xl border-2 border-pink-200">
-                ✨
+              <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-white flex items-center justify-center shadow-md shadow-pink-500/20 border-2 border-pink-300 p-0.5 overflow-hidden">
+                <img
+                  src={ENCANTO_LOGO}
+                  alt={store.name}
+                  className="w-full h-full object-contain rounded-xl"
+                />
               </div>
-              <span className={`absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full border-2 border-white ${store.isOpen ? 'bg-emerald-500' : 'bg-red-500'}`} title={store.isOpen ? 'Aberto Agora' : 'Fechado no Momento'} />
+              <span className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white ${store.isOpen ? 'bg-emerald-500' : 'bg-red-500'}`} title={store.isOpen ? 'Aberto Agora' : 'Fechado no Momento'} />
             </div>
 
             <div>
@@ -77,9 +85,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {store.isOpen ? '● Aberto' : '○ Fechado'}
                 </span>
               </div>
-              <p className="text-[11px] sm:text-xs text-stone-500 flex items-center gap-1 font-medium hidden sm:flex">
-                <Clock className="w-3 h-3 text-pink-600" />
-                <span>{store.openingHoursText}</span>
+              <p className="text-[11px] sm:text-xs text-pink-600 font-bold flex items-center gap-1">
+                <span>Doces Gourmet & Tapiocas</span>
+                <span className="text-stone-300 hidden sm:inline">•</span>
+                <span className="text-stone-500 font-normal hidden sm:inline">{store.openingHoursText}</span>
               </p>
             </div>
           </div>
@@ -108,6 +117,19 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Action Zone */}
           <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+            {/* Install / Download App Button */}
+            {onOpenInstallApp && (
+              <button
+                type="button"
+                onClick={onOpenInstallApp}
+                className="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 text-xs font-bold text-pink-700 bg-pink-100/80 hover:bg-pink-200/80 border border-pink-300/80 rounded-xl transition-all cursor-pointer shadow-xs active:scale-95"
+                title="Baixar Aplicativo da Loja no Celular ou PC"
+              >
+                <Download className="w-4 h-4 text-pink-600 animate-pulse" />
+                <span className="hidden md:inline">Baixar App</span>
+              </button>
+            )}
+
             {/* Direct WhatsApp Call */}
             <a
               href={`https://wa.me/${store.whatsappNumber.replace(/\D/g, '')}?text=Ol%C3%A1!%20Vim%20pelo%20card%C3%A1pio%20online%20da%20Encanto%20Mini.`}

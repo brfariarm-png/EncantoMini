@@ -12,10 +12,12 @@ import {
   Store, 
   Bike,
   Flame,
-  ArrowRight
+  ArrowRight,
+  Download
 } from 'lucide-react';
 import { Product, ProductCategory, StoreSettings } from '../types';
 import { formatCurrency } from '../utils/formatters';
+import { ENCANTO_LOGO } from '../assets/logo';
 
 interface HeroBannerProps {
   store: StoreSettings;
@@ -23,6 +25,7 @@ interface HeroBannerProps {
   onApplyCouponCode: (code: string) => void;
   onSelectCategory: (cat: ProductCategory) => void;
   onSelectProduct: (product: Product) => void;
+  onOpenInstallApp?: () => void;
 }
 
 const getCategoryEmoji = (category: ProductCategory): string => {
@@ -64,6 +67,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   onApplyCouponCode,
   onSelectCategory,
   onSelectProduct,
+  onOpenInstallApp,
 }) => {
   // Dynamically compute the 4 featured showcase items:
   // 1. Items with category === 'destaques'
@@ -118,19 +122,29 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
               </span>
             </div>
 
-            {/* Title & Authentic Slogan */}
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs font-black uppercase tracking-widest text-pink-400 bg-pink-950/80 px-2.5 py-0.5 rounded-full border border-pink-800/60">
-                  Confeitaria & Tapiocaria Artesanal
-                </span>
+            {/* Title & Authentic Slogan with Brand Logo */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white p-1 shadow-2xl shadow-pink-500/30 border-2 border-pink-400/80 shrink-0 overflow-hidden">
+                <img
+                  src={ENCANTO_LOGO}
+                  alt={store.name}
+                  className="w-full h-full object-contain rounded-xl"
+                />
               </div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight text-white leading-tight">
-                {store.name}
-              </h1>
-              <p className="mt-2 text-sm sm:text-base text-pink-100/90 max-w-2xl font-normal leading-relaxed">
-                {store.tagline}
-              </p>
+
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs font-black uppercase tracking-widest text-pink-400 bg-pink-950/80 px-2.5 py-0.5 rounded-full border border-pink-800/60">
+                    Confeitaria & Tapiocaria Artesanal
+                  </span>
+                </div>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight text-white leading-tight">
+                  {store.name}
+                </h1>
+                <p className="mt-1 text-sm sm:text-base text-pink-100/90 max-w-2xl font-normal leading-relaxed">
+                  {store.tagline}
+                </p>
+              </div>
             </div>
 
             {/* Schedule, Address & Como Chegar */}
@@ -166,8 +180,8 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
               </div>
             </div>
 
-            {/* Coupon pill */}
-            <div className="pt-1 flex flex-wrap items-center gap-2">
+            {/* Coupon pill & Install App Button */}
+            <div className="pt-1 flex flex-wrap items-center gap-2.5">
               <div className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500/25 to-rose-500/25 border border-pink-400/40 rounded-xl px-3.5 py-2 text-xs">
                 <Tag className="w-3.5 h-3.5 text-pink-300 shrink-0" />
                 <span className="text-pink-100">
@@ -181,6 +195,17 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                   Aplicar Desconto
                 </button>
               </div>
+
+              {onOpenInstallApp && (
+                <button
+                  type="button"
+                  onClick={onOpenInstallApp}
+                  className="inline-flex items-center gap-2 px-3.5 py-2 bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold rounded-xl border border-pink-400/40 transition-all shadow-md shadow-pink-600/30 cursor-pointer active:scale-95"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Baixar App no Celular</span>
+                </button>
+              )}
             </div>
 
           </div>

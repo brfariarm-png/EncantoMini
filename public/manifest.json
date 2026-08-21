@@ -1,0 +1,22 @@
+{
+  "short_name": "Encanto Mini",
+  "name": "Encanto Mini - Doces Gourmet",
+  "description": "Cardápio Digital Oficial de Doces Gourmet, Brownies e Tapiocas da Encanto Mini",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "type": "image/png",
+      "sizes": "192x192 512x512"
+    },
+    {
+      "src": "/logo.jpg",
+      "type": "image/jpeg",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#fff1f2",
+  "theme_color": "#db2777",
+  "display": "standalone",
+  "orientation": "portrait"
+}

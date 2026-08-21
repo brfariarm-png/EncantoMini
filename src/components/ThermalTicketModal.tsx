@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { Order, StoreSettings } from '../types';
 import { formatCurrency } from '../utils/formatters';
+import { ENCANTO_LOGO } from '../assets/logo';
 
 interface ThermalTicketModalProps {
   order: Order | null;
@@ -199,10 +200,17 @@ export const ThermalTicketModal: React.FC<ThermalTicketModalProps> = ({
           >
             {/* Store Header */}
             <div className="text-center pb-3 border-b-2 border-dashed border-stone-400">
+              <div className="w-14 h-14 mx-auto mb-1.5 rounded-full overflow-hidden bg-white p-0.5 border border-stone-300 flex items-center justify-center">
+                <img
+                  src={ENCANTO_LOGO}
+                  alt={store.name}
+                  className="w-full h-full object-contain"
+                />
+              </div>
               <h1 className="font-bold text-base tracking-tight uppercase">
                 {store.name}
               </h1>
-              <p className="text-[11px] text-stone-600">Brownies & Tapiocas Artesanais</p>
+              <p className="text-[11px] text-stone-600">Doces Gourmet, Brownies & Tapiocas</p>
               <p className="text-[10px] text-stone-500 mt-0.5">WhatsApp: {store.phoneDisplay || store.whatsappNumber}</p>
             </div>
 

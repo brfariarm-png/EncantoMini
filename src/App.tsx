@@ -45,6 +45,7 @@ import { StoreAdminModal } from './components/StoreAdminModal';
 import { OrdersManagerModal } from './components/OrdersManagerModal';
 import { ThermalTicketModal } from './components/ThermalTicketModal';
 import { SalesReportModal } from './components/SalesReportModal';
+import { InstallAppModal } from './components/InstallAppModal';
 import { CustomerReviews } from './components/CustomerReviews';
 import { Footer } from './components/Footer';
 import { FloatingCartBar } from './components/FloatingCartBar';
@@ -114,12 +115,27 @@ export default function App() {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isOrdersManagerOpen, setIsOrdersManagerOpen] = useState(false);
   const [isSalesReportOpen, setIsSalesReportOpen] = useState(false);
+  const [isInstallAppOpen, setIsInstallAppOpen] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [ticketPrintOrder, setTicketPrintOrder] = useState<Order | null>(null);
   const [pixModalOrder, setPixModalOrder] = useState<Order | null>(null);
   const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
 
   // Quick Toast
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Capture beforeinstallprompt for PWA App download
+  useEffect(() => {
+    const handleBeforeInstall = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+    };
+  }, []);
 
   // Keep track of order IDs seen to trigger sound chime on truly new orders
   const knownOrderIdsRef = useRef<Set<string>>(new Set(orders.map((o) => o.id)));
@@ -462,6 +478,7 @@ export default function App() {
         onOpenAdmin={() => setIsAdminOpen(true)}
         onOpenOrdersManager={() => setIsOrdersManagerOpen(true)}
         onOpenSalesReport={() => setIsSalesReportOpen(true)}
+        onOpenInstallApp={() => setIsInstallAppOpen(true)}
         ordersCount={orders.length}
         pendingOrdersCount={pendingOrdersCount}
         searchQuery={searchQuery}
@@ -478,6 +495,7 @@ export default function App() {
         }}
         onSelectCategory={(cat) => setSelectedCategory(cat)}
         onSelectProduct={(product) => setModalProduct(product)}
+        onOpenInstallApp={() => setIsInstallAppOpen(true)}
       />
 
       {/* Category Navigation Pills */}
@@ -576,7 +594,8 @@ export default function App() {
       {/* Footer */}
       <Footer 
         store={store} 
-        onOpenAdmin={() => setIsAdminOpen(true)} 
+        onOpenAdmin={() => setIsAdminOpen(true)}
+        onOpenInstallApp={() => setIsInstallAppOpen(true)}
       />
 
       {/* Floating Bottom Cart Bar for Mobile */}
@@ -587,6 +606,16 @@ export default function App() {
       />
 
       {/* Modals */}
+      <InstallAppModal
+        isOpen={isInstallAppOpen}
+        onClose={() => setIsInstallAppOpen(false)}
+        store={store}
+        deferredPrompt={deferredPrompt}
+        onInstalled={() => {
+          setIsInstallAppOpen(false);
+          showToast('Aplicativo instalado com sucesso!');
+        }}
+      />
       <ProductModal
         product={modalProduct}
         onClose={() => setModalProduct(null)}
