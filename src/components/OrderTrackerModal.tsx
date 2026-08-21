@@ -16,7 +16,7 @@ import {
   UtensilsCrossed
 } from 'lucide-react';
 import { Order, OrderStatus, StoreSettings } from '../types';
-import { formatCurrency, formatPhoneNumber, generateOrderWhatsAppMessage } from '../utils/formatters';
+import { formatCurrency, formatPhoneNumber, generateOrderWhatsAppMessage, getWhatsAppOrderUrl, openWhatsAppWithOrder } from '../utils/formatters';
 
 interface OrderTrackerModalProps {
   isOpen: boolean;
@@ -329,15 +329,13 @@ export const OrderTrackerModal: React.FC<OrderTrackerModalProps> = ({
 
                 {/* Actions */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
-                  <a
-                    href={`https://wa.me/${store.whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent(`Olá, gostaria de saber sobre o meu Pedido #${selectedOrder.orderNumber}`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-xs transition-colors"
+                  <button
+                    onClick={() => openWhatsAppWithOrder(selectedOrder, store)}
+                    className="flex items-center justify-center gap-2 py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
                   >
                     <Phone className="w-3.5 h-3.5" />
-                    <span>Falar com a Loja no WhatsApp</span>
-                  </a>
+                    <span>Enviar/Ver no WhatsApp</span>
+                  </button>
 
                   <button
                     onClick={() => {

@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { Order, StoreSettings } from '../types';
-import { formatCurrency, generatePixPayload } from '../utils/formatters';
+import { formatCurrency, generatePixPayload, openWhatsAppWithOrder } from '../utils/formatters';
 
 interface PixModalProps {
   order: Order | null;
@@ -179,16 +179,24 @@ export const PixModal: React.FC<PixModalProps> = ({
 
           {/* Confirmation Action */}
           <div className="pt-2 space-y-2">
+            <button
+              onClick={() => openWhatsAppWithOrder(order, store)}
+              className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md shadow-emerald-600/20 transition-all cursor-pointer flex items-center justify-center gap-2 font-heading"
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span>Enviar Notificação do Pedido no WhatsApp</span>
+            </button>
+
             {!confirmed ? (
               <button
                 onClick={handleConfirmPaid}
-                className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md shadow-emerald-600/20 transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-2.5 bg-stone-900 hover:bg-stone-800 active:scale-95 text-white font-bold text-xs sm:text-sm rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2"
               >
-                <Check className="w-4 h-4" />
-                <span>Já Realizei o Pagamento via Pix</span>
+                <Check className="w-4 h-4 text-emerald-400" />
+                <span>Já Paguei via Pix (Confirmar)</span>
               </button>
             ) : (
-              <div className="p-3 bg-emerald-100 border border-emerald-300 text-emerald-900 rounded-xl text-xs text-center font-bold flex items-center justify-center gap-2">
+              <div className="p-2.5 bg-emerald-100 border border-emerald-300 text-emerald-900 rounded-xl text-xs text-center font-bold flex items-center justify-center gap-2">
                 <Sparkles className="w-4 h-4 text-emerald-600" />
                 <span>Pagamento Notificado! Pedido em Preparação.</span>
               </div>

@@ -146,12 +146,26 @@ export function generateOrderWhatsAppMessage(order: Order, store: StoreSettings)
   return message;
 }
 
-export function openWhatsAppWithOrder(order: Order, store: StoreSettings) {
+export function getWhatsAppOrderUrl(order: Order, store: StoreSettings): string {
   const message = generateOrderWhatsAppMessage(order, store);
   const encoded = encodeURIComponent(message);
-  const cleanPhone = store.whatsappNumber.replace(/\D/g, '');
-  const url = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encoded}`;
-  window.open(url, '_blank');
+  const cleanPhone = getCleanWhatsAppNumber(store.whatsappNumber);
+  return `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encoded}`;
+}
+
+export function openWhatsAppWithOrder(order: Order, store: StoreSettings) {
+  const url = getWhatsAppOrderUrl(order, store);
+  try {
+    const a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch {
+    window.open(url, '_blank');
+  }
 }
 
 /**

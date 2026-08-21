@@ -743,18 +743,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               onClick={() => validateAndSubmit(true)}
               className="w-full flex items-center justify-center gap-2 py-3.5 px-4 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.99] text-white font-extrabold text-sm rounded-2xl shadow-md shadow-emerald-600/25 transition-all cursor-pointer font-heading"
             >
-              <Send className="w-4 h-4" />
-              <span>Enviar Pedido pelo WhatsApp</span>
+              <Send className="w-4.5 h-4.5" />
+              <span>Finalizar e Enviar no WhatsApp</span>
               <span className="ml-1 opacity-90">({formatCurrency(total)})</span>
             </button>
 
-            {/* Direct Digital Order Button */}
-            <button
-              onClick={() => validateAndSubmit(false)}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-pink-50 hover:bg-pink-100 text-pink-900 font-bold text-xs rounded-xl transition-colors cursor-pointer border border-pink-200"
-            >
-              <span>Concluir Pedido Online</span>
-            </button>
+            <p className="text-[11px] text-center text-stone-500 font-medium">
+              📲 Seu pedido será registrado no sistema e enviado diretamente no WhatsApp da loja!
+            </p>
           </div>
         )}
 
