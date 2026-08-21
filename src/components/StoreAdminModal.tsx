@@ -129,7 +129,12 @@ export const StoreAdminModal: React.FC<StoreAdminModalProps> = ({
 
   const handleSaveSettings = (e: React.FormEvent) => {
     e.preventDefault();
-    onUpdateStoreSettings(storeForm);
+    const formatted = formatPhoneNumber(storeForm.whatsappNumber);
+    const updatedForm = {
+      ...storeForm,
+      phoneDisplay: formatted || storeForm.phoneDisplay || storeForm.whatsappNumber,
+    };
+    onUpdateStoreSettings(updatedForm);
     setSettingsSavedMsg(true);
     setTimeout(() => setSettingsSavedMsg(false), 3000);
   };

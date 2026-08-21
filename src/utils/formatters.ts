@@ -8,7 +8,20 @@ export function formatCurrency(value: number): string {
 }
 
 export function formatPhoneNumber(phone: string): string {
+  if (!phone) return '';
   const cleaned = phone.replace(/\D/g, '');
+  if (cleaned.length === 13 && cleaned.startsWith('55')) {
+    const ddd = cleaned.slice(2, 4);
+    const num1 = cleaned.slice(4, 9);
+    const num2 = cleaned.slice(9);
+    return `(${ddd}) ${num1}-${num2}`;
+  }
+  if (cleaned.length === 12 && cleaned.startsWith('55')) {
+    const ddd = cleaned.slice(2, 4);
+    const num1 = cleaned.slice(4, 8);
+    const num2 = cleaned.slice(8);
+    return `(${ddd}) ${num1}-${num2}`;
+  }
   if (cleaned.length === 11) {
     return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7)}`;
   }
@@ -16,6 +29,15 @@ export function formatPhoneNumber(phone: string): string {
     return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 6)}-${cleaned.slice(6)}`;
   }
   return phone;
+}
+
+export function getCleanWhatsAppNumber(phone: string): string {
+  if (!phone) return '';
+  const cleaned = phone.replace(/\D/g, '');
+  if (cleaned.length === 10 || cleaned.length === 11) {
+    return `55${cleaned}`;
+  }
+  return cleaned;
 }
 
 export function generateOrderWhatsAppMessage(order: Order, store: StoreSettings): string {

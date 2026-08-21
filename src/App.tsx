@@ -53,6 +53,7 @@ import { AdminLoginModal } from './components/AdminLoginModal';
 import { Footer } from './components/Footer';
 import { FloatingCartBar } from './components/FloatingCartBar';
 import { SearchX, CheckCircle2, Bell, ChefHat, Printer } from 'lucide-react';
+import { ENCANTO_LOGO } from './assets/logo';
 
 export default function App() {
   // State initialization with localStorage fallback
@@ -203,6 +204,27 @@ export default function App() {
       setToastMessage(null);
     }, 3000);
   };
+
+  // Set Dynamic Favicon and Title
+  useEffect(() => {
+    const faviconUrl = store.logo || ENCANTO_LOGO || '/logo.jpg';
+    
+    // Update or create all favicon link elements
+    const linkRels = ['icon', 'shortcut icon', 'apple-touch-icon'];
+    linkRels.forEach((rel) => {
+      let link = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement | null;
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = rel;
+        document.head.appendChild(link);
+      }
+      link.href = faviconUrl;
+    });
+
+    if (store.name) {
+      document.title = `${store.name} - Doces Gourmet | Cardápio Oficial`;
+    }
+  }, [store.logo, store.name]);
 
   // Sync to local storage
   useEffect(() => {

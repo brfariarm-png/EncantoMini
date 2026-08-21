@@ -1,7 +1,8 @@
 import React from 'react';
-import { Phone, MapPin, Clock, Instagram, Heart, Sparkles, ShieldCheck, Navigation, Download } from 'lucide-react';
+import { Phone, MapPin, Clock, Instagram, Heart, Sparkles, ShieldCheck, Navigation, Download, ExternalLink } from 'lucide-react';
 import { StoreSettings } from '../types';
 import { ENCANTO_LOGO } from '../assets/logo';
+import { formatPhoneNumber, getCleanWhatsAppNumber } from '../utils/formatters';
 
 interface FooterProps {
   store: StoreSettings;
@@ -10,6 +11,20 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ store, onOpenAdmin, onOpenInstallApp }) => {
+  // Format phone number & WhatsApp url cleanly
+  const cleanPhone = getCleanWhatsAppNumber(store.whatsappNumber || store.phoneDisplay || '');
+  const displayPhone = store.phoneDisplay || formatPhoneNumber(store.whatsappNumber) || '(11) 99999-8888';
+  const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(`Olá! Vim pelo cardápio online da ${store.name}.`)}`;
+
+  // Parse Instagram handle & direct URL
+  const rawInsta = (store.instagram || '@encanto.mini').trim();
+  const cleanHandle = rawInsta
+    .replace(/^https?:\/\/(www\.)?instagram\.com\//i, '')
+    .replace(/^@/, '')
+    .replace(/\/.*$/, '');
+  const instagramUrl = `https://www.instagram.com/${cleanHandle}`;
+  const instagramDisplayText = `@${cleanHandle}`;
+
   return (
     <footer className="bg-stone-950 text-stone-300 pt-12 pb-24 sm:pb-12 border-t border-stone-800 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -51,7 +66,7 @@ export const Footer: React.FC<FooterProps> = ({ store, onOpenAdmin, onOpenInstal
             <h4 className="font-heading font-bold text-sm uppercase tracking-wider text-white">
               Endereço & Atendimento
             </h4>
-            <ul className="space-y-2 text-xs text-stone-400">
+            <ul className="space-y-2.5 text-xs text-stone-400">
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-pink-400 shrink-0 mt-0.5" />
                 <div>
@@ -67,20 +82,31 @@ export const Footer: React.FC<FooterProps> = ({ store, onOpenAdmin, onOpenInstal
                   </a>
                 </div>
               </li>
-              <li className="flex items-center gap-2 pt-1">
+              <li className="flex items-center gap-2 pt-0.5">
                 <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
                 <a
-                  href={`https://wa.me/${store.whatsappNumber.replace(/\D/g, '')}`}
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-emerald-400 transition-colors"
+                  className="text-stone-200 hover:text-emerald-400 font-medium transition-colors inline-flex items-center gap-1.5"
+                  title="Falar no WhatsApp / Ligar"
                 >
-                  {store.phoneDisplay}
+                  <span>{displayPhone}</span>
+                  <span className="text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800/80 px-1.5 py-0.5 rounded">WhatsApp</span>
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <Instagram className="w-4 h-4 text-pink-400 shrink-0" />
-                <span className="text-stone-300">{store.instagram}</span>
+                <a
+                  href={instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-stone-200 hover:text-pink-400 font-medium transition-colors inline-flex items-center gap-1"
+                  title="Abrir perfil no Instagram"
+                >
+                  <span>{instagramDisplayText}</span>
+                  <ExternalLink className="w-3 h-3 opacity-70 text-pink-400" />
+                </a>
               </li>
             </ul>
           </div>
