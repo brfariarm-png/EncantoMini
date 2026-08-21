@@ -26,7 +26,9 @@ import {
   ExternalLink,
   Sparkles,
   Upload,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Lock,
+  LogOut
 } from 'lucide-react';
 import { Coupon, NeighborhoodFee, Order, OrderStatus, Product, ProductCategory, StoreSettings } from '../types';
 import { formatCurrency, formatPhoneNumber } from '../utils/formatters';
@@ -36,6 +38,7 @@ import { ENCANTO_LOGO } from '../assets/logo';
 interface StoreAdminModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onLogout?: () => void;
   orders: Order[];
   onUpdateOrderStatus: (orderId: string, status: OrderStatus) => void;
   products: Product[];
@@ -55,6 +58,7 @@ interface StoreAdminModalProps {
 export const StoreAdminModal: React.FC<StoreAdminModalProps> = ({
   isOpen,
   onClose,
+  onLogout,
   orders,
   onUpdateOrderStatus,
   products,
@@ -295,12 +299,26 @@ export const StoreAdminModal: React.FC<StoreAdminModalProps> = ({
             </div>
           </div>
 
-          <button
-            onClick={onClose}
-            className="w-9 h-9 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            {onLogout && (
+              <button
+                type="button"
+                onClick={onLogout}
+                className="px-3 py-1.5 rounded-xl bg-pink-950/80 hover:bg-pink-900 border border-pink-700/50 text-pink-200 hover:text-white text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                title="Bloquear painel e encerrar sessão"
+              >
+                <Lock className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Bloquear / Sair</span>
+              </button>
+            )}
+
+            <button
+              onClick={onClose}
+              className="w-9 h-9 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Tab Navigation */}

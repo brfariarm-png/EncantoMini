@@ -9,7 +9,8 @@ import {
   PhoneCall, 
   ChefHat,
   TrendingUp,
-  Download
+  Download,
+  Lock
 } from 'lucide-react';
 import { StoreSettings } from '../types';
 import { formatCurrency } from '../utils/formatters';
@@ -22,6 +23,7 @@ interface NavbarProps {
   onOpenCart: () => void;
   onOpenTracker: () => void;
   onOpenAdmin: () => void;
+  isAdminAuthenticated?: boolean;
   onOpenOrdersManager?: () => void;
   onOpenSalesReport?: () => void;
   onOpenInstallApp?: () => void;
@@ -38,6 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenCart,
   onOpenTracker,
   onOpenAdmin,
+  isAdminAuthenticated = false,
   onOpenOrdersManager,
   onOpenSalesReport,
   onOpenInstallApp,
@@ -195,11 +198,21 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Merchant Admin Toggle */}
             <button
               onClick={onOpenAdmin}
-              className="flex items-center gap-1.5 px-2 sm:px-3 py-2 text-xs font-semibold text-stone-600 hover:text-stone-900 bg-stone-50 hover:bg-stone-100 border border-stone-200 rounded-xl transition-colors cursor-pointer"
-              title="Painel do Lojista / Pedidos"
+              className={`flex items-center gap-1.5 px-2 sm:px-3 py-2 text-xs font-semibold rounded-xl border transition-colors cursor-pointer ${
+                isAdminAuthenticated
+                  ? 'text-pink-900 bg-pink-50 hover:bg-pink-100 border-pink-200 shadow-2xs'
+                  : 'text-stone-600 hover:text-stone-900 bg-stone-50 hover:bg-stone-100 border-stone-200'
+              }`}
+              title={isAdminAuthenticated ? "Painel do Lojista (Conectado)" : "Acesso Restrito ao Lojista (Requer Senha)"}
             >
-              <Store className="w-4 h-4 text-stone-500" />
-              <span className="hidden xl:inline">Painel Lojista</span>
+              {isAdminAuthenticated ? (
+                <Store className="w-4 h-4 text-pink-600" />
+              ) : (
+                <Lock className="w-3.5 h-3.5 text-stone-500" />
+              )}
+              <span className="hidden xl:inline">
+                {isAdminAuthenticated ? 'Painel Lojista' : 'Lojista'}
+              </span>
             </button>
 
             {/* Cart Button */}

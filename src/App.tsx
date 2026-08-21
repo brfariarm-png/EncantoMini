@@ -48,6 +48,7 @@ import { ThermalTicketModal } from './components/ThermalTicketModal';
 import { SalesReportModal } from './components/SalesReportModal';
 import { InstallAppModal } from './components/InstallAppModal';
 import { CustomerReviews } from './components/CustomerReviews';
+import { AdminLoginModal } from './components/AdminLoginModal';
 import { Footer } from './components/Footer';
 import { FloatingCartBar } from './components/FloatingCartBar';
 import { SearchX, CheckCircle2, Bell, ChefHat, Printer } from 'lucide-react';
@@ -122,6 +123,58 @@ export default function App() {
   const [ticketPrintOrder, setTicketPrintOrder] = useState<Order | null>(null);
   const [pixModalOrder, setPixModalOrder] = useState<Order | null>(null);
   const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
+
+  // Admin Authentication (User: encantomini / Pass: 1234)
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
+    try {
+      return sessionStorage.getItem('encanto_admin_auth') === 'true';
+    } catch {
+      return false;
+    }
+  });
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [pendingAdminAction, setPendingAdminAction] = useState<(() => void) | null>(null);
+
+  const requireAdminAuth = (action: () => void) => {
+    if (isAdminAuthenticated) {
+      action();
+    } else {
+      setPendingAdminAction(() => action);
+      setIsLoginModalOpen(true);
+    }
+  };
+
+  const handleAdminLoginSuccess = () => {
+    setIsAdminAuthenticated(true);
+    try {
+      sessionStorage.setItem('encanto_admin_auth', 'true');
+    } catch (e) {
+      console.warn('Session storage write error', e);
+    }
+    setIsLoginModalOpen(false);
+    showToast('🔓 Acesso de administrador liberado com sucesso!');
+    
+    if (pendingAdminAction) {
+      pendingAdminAction();
+      setPendingAdminAction(null);
+    } else {
+      setIsAdminOpen(true);
+    }
+  };
+
+  const handleAdminLogout = () => {
+    setIsAdminAuthenticated(false);
+    try {
+      sessionStorage.removeItem('encanto_admin_auth');
+    } catch (e) {
+      console.warn('Session storage error', e);
+    }
+    setIsAdminOpen(false);
+    setIsOrdersManagerOpen(false);
+    setIsSalesReportOpen(false);
+    setEditingProductDirectly(null);
+    showToast('🔒 Modo lojista bloqueado com sucesso.');
+  };
 
   // Quick Toast
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -481,9 +534,10 @@ export default function App() {
         cartTotal={cartTotal}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenTracker={() => setIsTrackerOpen(true)}
-        onOpenAdmin={() => setIsAdminOpen(true)}
-        onOpenOrdersManager={() => setIsOrdersManagerOpen(true)}
-        onOpenSalesReport={() => setIsSalesReportOpen(true)}
+        onOpenAdmin={() => requireAdminAuth(() => setIsAdminOpen(true))}
+        isAdminAuthenticated={isAdminAuthenticated}
+        onOpenOrdersManager={() => requireAdminAuth(() => setIsOrdersManagerOpen(true))}
+        onOpenSalesReport={() => requireAdminAuth(() => setIsSalesReportOpen(true))}
         onOpenInstallApp={() => setIsInstallAppOpen(true)}
         ordersCount={orders.length}
         pendingOrdersCount={pendingOrdersCount}
@@ -600,7 +654,7 @@ export default function App() {
       {/* Footer */}
       <Footer 
         store={store} 
-        onOpenAdmin={() => setIsAdminOpen(true)}
+        onOpenAdmin={() => requireAdminAuth(() => setIsAdminOpen(true))}
         onOpenInstallApp={() => setIsInstallAppOpen(true)}
       />
 
@@ -612,6 +666,15 @@ export default function App() {
       />
 
       {/* Modals */}
+      <AdminLoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => {
+          setIsLoginModalOpen(false);
+          setPendingAdminAction(null);
+        }}
+        onSuccess={handleAdminLoginSuccess}
+      />
+
       <InstallAppModal
         isOpen={isInstallAppOpen}
         onClose={() => setIsInstallAppOpen(false)}
@@ -626,7 +689,7 @@ export default function App() {
         product={modalProduct}
         onClose={() => setModalProduct(null)}
         onAddToCart={handleAddToCart}
-        onEditProduct={(p) => setEditingProductDirectly(p)}
+        onEditProduct={(p) => requireAdminAuth(() => setEditingProductDirectly(p))}
       />
 
       {/* Direct Item Editor Modal */}
@@ -700,7 +763,7 @@ export default function App() {
         onOpenTicketPrint={(order) => setTicketPrintOrder(order)}
         onOpenSalesReport={() => {
           setIsOrdersManagerOpen(false);
-          setIsSalesReportOpen(true);
+          requireAdminAuth(() => setIsSalesReportOpen(true));
         }}
       />
 
@@ -725,6 +788,7 @@ export default function App() {
       <StoreAdminModal
         isOpen={isAdminOpen}
         onClose={() => setIsAdminOpen(false)}
+        onLogout={handleAdminLogout}
         orders={orders}
         onUpdateOrderStatus={handleUpdateOrderStatus}
         products={products}
